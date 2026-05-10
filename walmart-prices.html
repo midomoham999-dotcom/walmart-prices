@@ -1,1 +1,778 @@
-walmart-prices.html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>أسعار وولمارت</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --blue: #0071ce;
+      --yellow: #ffc220;
+      --dark: #1a1a2e;
+      --card: #ffffff;
+      --bg: #f0f4f8;
+      --text: #1a1a2e;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --shadow: 0 4px 24px rgba(0,113,206,0.10);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    header {
+      background: var(--blue);
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-spark {
+      font-size: 28px;
+    }
+
+    .logo-text {
+      color: white;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-text span {
+      color: var(--yellow);
+    }
+
+    .header-badge {
+      background: var(--yellow);
+      color: var(--dark);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, var(--blue) 0%, #004f99 100%);
+      padding: 48px 24px 64px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -40px; left: -40px;
+      width: 200px; height: 200px;
+      background: rgba(255,194,32,0.08);
+      border-radius: 50%;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; right: -40px;
+      width: 280px; height: 280px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+    }
+
+    .hero h1 {
+      color: white;
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero p {
+      color: rgba(255,255,255,0.8);
+      font-size: 15px;
+      margin-bottom: 28px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* SEARCH */
+    .search-box {
+      max-width: 500px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .search-input-wrap {
+      display: flex;
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+
+    .search-input-wrap input {
+      flex: 1;
+      border: none;
+      outline: none;
+      padding: 16px 20px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 15px;
+      color: var(--text);
+      background: transparent;
+    }
+
+    .search-input-wrap input::placeholder {
+      color: var(--muted);
+    }
+
+    .search-btn {
+      background: var(--yellow);
+      border: none;
+      padding: 16px 20px;
+      cursor: pointer;
+      font-size: 20px;
+      transition: background 0.2s;
+    }
+
+    .search-btn:hover { background: #e6ad00; }
+
+    /* CATEGORIES FILTER */
+    .categories-section {
+      padding: 24px 20px 8px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .categories-label {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .categories-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+
+    .categories-scroll::-webkit-scrollbar { display: none; }
+
+    .cat-btn {
+      background: white;
+      border: 2px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .cat-btn:hover, .cat-btn.active {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: white;
+    }
+
+    /* STATS BAR */
+    .stats-bar {
+      max-width: 900px;
+      margin: 16px auto 0;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stats-count {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .stats-count span {
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    /* PRODUCTS GRID */
+    .products-section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 16px 20px 48px;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(0,113,206,0.18);
+    }
+
+    .product-img {
+      width: 100%;
+      height: 160px;
+      object-fit: contain;
+      background: #f8fafc;
+      padding: 16px;
+    }
+
+    .product-img-placeholder {
+      width: 100%;
+      height: 160px;
+      background: linear-gradient(135deg, #f0f4f8, #e5e7eb);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+    }
+
+    .product-body {
+      padding: 14px 16px 16px;
+    }
+
+    .product-category {
+      font-size: 11px;
+      color: var(--blue);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .product-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .product-price-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .product-price {
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--blue);
+    }
+
+    .product-price .dollar {
+      font-size: 14px;
+      font-weight: 700;
+      vertical-align: super;
+    }
+
+    .walmart-link {
+      background: var(--yellow);
+      color: var(--dark);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .walmart-link:hover { background: #e6ad00; }
+
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+
+    .empty-state .icon { font-size: 56px; margin-bottom: 16px; }
+    .empty-state h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+    .empty-state p { font-size: 14px; }
+
+    /* ADMIN PANEL */
+    .admin-toggle {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      background: var(--dark);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 52px;
+      height: 52px;
+      font-size: 22px;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      transition: transform 0.2s;
+      z-index: 200;
+    }
+
+    .admin-toggle:hover { transform: scale(1.1); }
+
+    .admin-panel {
+      position: fixed;
+      bottom: 90px;
+      left: 24px;
+      background: white;
+      border-radius: 20px;
+      padding: 24px;
+      width: 320px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+      z-index: 200;
+      display: none;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .admin-panel.open { display: block; }
+
+    .admin-title {
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--text);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .admin-title span { color: var(--blue); }
+
+    .admin-field {
+      margin-bottom: 12px;
+    }
+
+    .admin-field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .admin-field input, .admin-field select {
+      width: 100%;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+      color: var(--text);
+    }
+
+    .admin-field input:focus, .admin-field select:focus {
+      border-color: var(--blue);
+    }
+
+    .admin-password {
+      margin-bottom: 16px;
+    }
+
+    .admin-add-btn {
+      width: 100%;
+      background: var(--blue);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .admin-add-btn:hover { background: #005fa3; }
+
+    .admin-products-list {
+      margin-top: 16px;
+      max-height: 160px;
+      overflow-y: auto;
+      border-top: 2px solid var(--border);
+      padding-top: 12px;
+    }
+
+    .admin-product-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .admin-product-item:last-child { border-bottom: none; }
+
+    .admin-delete-btn {
+      background: #fee2e2;
+      color: #dc2626;
+      border: none;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    .admin-delete-btn:hover { background: #fca5a5; }
+
+    .lock-screen {
+      text-align: center;
+    }
+
+    .lock-screen p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .wrong-pass {
+      color: #dc2626;
+      font-size: 12px;
+      margin-top: 8px;
+      display: none;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--dark);
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 20px;
+      font-size: 13px;
+    }
+
+    footer strong { color: var(--yellow); }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 22px; }
+      .products-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .admin-panel { width: calc(100vw - 48px); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <span class="logo-spark">✦</span>
+    <span class="logo-text">أسعار <span>وولمارت</span></span>
+  </div>
+  <span class="header-badge">🇺🇸 USA</span>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>ابحث عن أسعار المنتجات</h1>
+  <p>أسعار محدثة من وولمارت الأمريكي بالدولار</p>
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <input type="text" id="searchInput" placeholder="ابحث عن منتج... مثل: iPhone, TV, Laptop" oninput="filterProducts()"/>
+      <button class="search-btn">🔍</button>
+    </div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<div class="categories-section">
+  <div class="categories-label">الفئات</div>
+  <div class="categories-scroll" id="categoriesBar">
+    <button class="cat-btn active" onclick="filterByCategory('الكل', this)">الكل</button>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-count">إجمالي المنتجات: <span id="productCount">0</span></div>
+  <div class="stats-count">آخر تحديث: <span id="lastUpdate">—</span></div>
+</div>
+
+<!-- PRODUCTS -->
+<div class="products-section">
+  <div class="products-grid" id="productsGrid"></div>
+  <div class="empty-state" id="emptyState">
+    <div class="icon">🛒</div>
+    <h3>لا توجد منتجات</h3>
+    <p>لم يتم إضافة منتجات بعد</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  موقع <strong>أسعار وولمارت</strong> — للاستفسار تواصل معنا
+</footer>
+
+<!-- ADMIN BUTTON -->
+<button class="admin-toggle" onclick="toggleAdmin()" title="لوحة التحكم">⚙️</button>
+
+<!-- ADMIN PANEL -->
+<div class="admin-panel" id="adminPanel">
+
+  <!-- LOCK SCREEN -->
+  <div id="lockScreen" class="lock-screen">
+    <div class="admin-title">🔒 <span>لوحة التحكم</span></div>
+    <p>أدخل كلمة المرور للدخول</p>
+    <div class="admin-field">
+      <input type="password" id="passInput" placeholder="كلمة المرور" onkeydown="if(event.key==='Enter') checkPass()"/>
+    </div>
+    <button class="admin-add-btn" onclick="checkPass()">دخول</button>
+    <p class="wrong-pass" id="wrongPass">❌ كلمة المرور غلط</p>
+  </div>
+
+  <!-- ADMIN CONTENT -->
+  <div id="adminContent" style="display:none">
+    <div class="admin-title">⚙️ <span>إضافة منتج</span></div>
+
+    <div class="admin-field">
+      <label>اسم المنتج (عربي أو إنجليزي)</label>
+      <input type="text" id="adminName" placeholder="مثال: iPhone 15"/>
+    </div>
+    <div class="admin-field">
+      <label>الفئة</label>
+      <input type="text" id="adminCategory" placeholder="مثال: إلكترونيات، ملابس، طعام"/>
+    </div>
+    <div class="admin-field">
+      <label>السعر بالدولار $</label>
+      <input type="number" id="adminPrice" placeholder="مثال: 299"/>
+    </div>
+    <div class="admin-field">
+      <label>رابط المنتج على وولمارت (اختياري)</label>
+      <input type="text" id="adminLink" placeholder="https://walmart.com/..."/>
+    </div>
+    <div class="admin-field">
+      <label>إيموجي المنتج (اختياري)</label>
+      <input type="text" id="adminEmoji" placeholder="مثال: 📱 💻 👕"/>
+    </div>
+    <button class="admin-add-btn" onclick="addProduct()">➕ إضافة المنتج</button>
+
+    <div class="admin-products-list" id="adminProductsList"></div>
+    <button class="admin-add-btn" style="margin-top:12px; background:#6b7280;" onclick="adminLogout()">🔓 خروج</button>
+  </div>
+</div>
+
+<script>
+  // ===== كلمة المرور — غيّرها لأي كلمة تحبها =====
+  const ADMIN_PASSWORD = "walmart2024";
+
+  // ===== بيانات المنتجات =====
+  let products = JSON.parse(localStorage.getItem('walmartProducts') || '[]');
+  let currentCategory = 'الكل';
+  let isLoggedIn = false;
+
+  // ===== عرض المنتجات =====
+  function renderProducts() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    let filtered = products.filter(p => {
+      const matchCat = currentCategory === 'الكل' || p.category === currentCategory;
+      const matchSearch = p.name.toLowerCase().includes(search) || p.category.toLowerCase().includes(search);
+      return matchCat && matchSearch;
+    });
+
+    const grid = document.getElementById('productsGrid');
+    const empty = document.getElementById('emptyState');
+    const count = document.getElementById('productCount');
+
+    count.textContent = filtered.length;
+    grid.innerHTML = '';
+
+    if (filtered.length === 0) {
+      empty.style.display = 'block';
+      if (search || currentCategory !== 'الكل') {
+        empty.querySelector('h3').textContent = 'لا توجد نتائج';
+        empty.querySelector('p').textContent = 'جرب كلمة بحث مختلفة أو فئة أخرى';
+        empty.querySelector('.icon').textContent = '🔍';
+      } else {
+        empty.querySelector('h3').textContent = 'لا توجد منتجات';
+        empty.querySelector('p').textContent = 'لم يتم إضافة منتجات بعد';
+        empty.querySelector('.icon').textContent = '🛒';
+      }
+    } else {
+      empty.style.display = 'none';
+      filtered.forEach((p, i) => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.style.animationDelay = `${i * 0.05}s`;
+        card.innerHTML = `
+          <div class="product-img-placeholder">${p.emoji || '🛍️'}</div>
+          <div class="product-body">
+            <div class="product-category">${p.category}</div>
+            <div class="product-name">${p.name}</div>
+            <div class="product-price-row">
+              <div class="product-price"><span class="dollar">$</span>${parseFloat(p.price).toFixed(2)}</div>
+              ${p.link ? `<a href="${p.link}" target="_blank" class="walmart-link">وولمارت ↗</a>` : ''}
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+  }
+
+  // ===== تحديث الفئات =====
+  function renderCategories() {
+    const bar = document.getElementById('categoriesBar');
+    const cats = ['الكل', ...new Set(products.map(p => p.category))];
+    bar.innerHTML = '';
+    cats.forEach(cat => {
+      const btn = document.createElement('button');
+      btn.className = 'cat-btn' + (cat === currentCategory ? ' active' : '');
+      btn.textContent = cat;
+      btn.onclick = () => filterByCategory(cat, btn);
+      bar.appendChild(btn);
+    });
+  }
+
+  function filterByCategory(cat, btn) {
+    currentCategory = cat;
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderProducts();
+  }
+
+  function filterProducts() { renderProducts(); }
+
+  // ===== آخر تحديث =====
+  function updateTimestamp() {
+    const saved = localStorage.getItem('lastUpdate');
+    if (saved) document.getElementById('lastUpdate').textContent = saved;
+  }
+
+  // ===== لوحة التحكم =====
+  function toggleAdmin() {
+    const panel = document.getElementById('adminPanel');
+    panel.classList.toggle('open');
+  }
+
+  function checkPass() {
+    const input = document.getElementById('passInput').value;
+    if (input === ADMIN_PASSWORD) {
+      document.getElementById('lockScreen').style.display = 'none';
+      document.getElementById('adminContent').style.display = 'block';
+      isLoggedIn = true;
+      renderAdminList();
+    } else {
+      document.getElementById('wrongPass').style.display = 'block';
+    }
+  }
+
+  function adminLogout() {
+    document.getElementById('lockScreen').style.display = 'block';
+    document.getElementById('adminContent').style.display = 'none';
+    document.getElementById('passInput').value = '';
+    document.getElementById('wrongPass').style.display = 'none';
+    isLoggedIn = false;
+  }
+
+  function addProduct() {
+    const name = document.getElementById('adminName').value.trim();
+    const category = document.getElementById('adminCategory').value.trim();
+    const price = document.getElementById('adminPrice').value.trim();
+    const link = document.getElementById('adminLink').value.trim();
+    const emoji = document.getElementById('adminEmoji').value.trim();
+
+    if (!name || !category || !price) {
+      alert('من فضلك أدخل الاسم والفئة والسعر');
+      return;
+    }
+
+    products.push({ name, category, price, link, emoji, id: Date.now() });
+    localStorage.setItem('walmartProducts', JSON.stringify(products));
+
+    const now = new Date().toLocaleDateString('ar-EG', { day: 'numeric', month: 'long', year: 'numeric' });
+    localStorage.setItem('lastUpdate', now);
+
+    document.getElementById('adminName').value = '';
+    document.getElementById('adminCategory').value = '';
+    document.getElementById('adminPrice').value = '';
+    document.getElementById('adminLink').value = '';
+    document.getElementById('adminEmoji').value = '';
+
+    renderCategories();
+    renderProducts();
+    updateTimestamp();
+    renderAdminList();
+  }
+
+  function deleteProduct(id) {
+    products = products.filter(p => p.id !== id);
+    localStorage.setItem('walmartProducts', JSON.stringify(products));
+    renderCategories();
+    renderProducts();
+    renderAdminList();
+  }
+
+  function renderAdminList() {
+    const list = document.getElementById('adminProductsList');
+    if (products.length === 0) {
+      list.innerHTML = '<p style="color:#6b7280;font-size:13px;text-align:center;padding:8px">لا توجد منتجات بعد</p>';
+      return;
+    }
+    list.innerHTML = products.map(p => `
+      <div class="admin-product-item">
+        <span>${p.emoji || '🛍️'} ${p.name} — $${p.price}</span>
+        <button class="admin-delete-btn" onclick="deleteProduct(${p.id})">حذف</button>
+      </div>
+    `).join('');
+  }
+
+  // ===== تشغيل =====
+  renderCategories();
+  renderProducts();
+  updateTimestamp();
+</script>
+</body>
+</html>
